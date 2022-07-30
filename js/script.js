@@ -5,13 +5,14 @@ var swiper = new Swiper(".mySwiper", {
     },
 });
 
-
 const content = document.querySelector('.slider__video-content');
 const play = document.querySelectorAll('.btn__play');
-const video = document.querySelector('video');
+const videos = document.querySelectorAll('video');
 
 play.forEach((btn__play) => {
-    btn__play.addEventListener('click', () => {
+    btn__play.addEventListener('click', (event) => {
+        videos.forEach(video => video.load())
+        const video = event.target.closest('.slider__video').querySelector('video');
         video.play();
         video.setAttribute('controls', 'controls');
         btn__play.classList.add('btn__play--hidden');
