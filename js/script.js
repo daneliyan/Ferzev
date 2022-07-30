@@ -1,21 +1,40 @@
-var swiper = new Swiper(".mySwiper", {
+const swiper = new Swiper(".mySwiper", {
     navigation: {
         nextEl: ".swiper-button-next",
         prevEl: ".swiper-button-prev",
     },
 });
 
-const content = document.querySelector('.slider__video-content');
 const play = document.querySelectorAll('.btn__play');
-const videos = document.querySelectorAll('video');
 
-play.forEach((btn__play) => {
-    btn__play.addEventListener('click', (event) => {
-        videos.forEach(video => video.load())
+function reset() {
+    const activeVideoBtn = document.querySelector('.btn__play--hidden');
+
+    if (!activeVideoBtn) return;
+
+    activeVideoBtn.classList.remove('btn__play--hidden');
+
+    const activeVideo = activeVideoBtn.closest('.slider__video').querySelector('video');
+    activeVideo.removeAttribute('controls');
+    activeVideo.load();
+
+    const activeContent = activeVideoBtn.closest('.slider__video').querySelector('.slider__video-content');
+    activeContent.classList.remove('slider__video-content--hidden');
+}
+
+play.forEach(btnPlay => {
+    btnPlay.addEventListener('click', (event) => {
+        reset(); // Встановлюються стандартні параметри відео яке було включено
+
+        // Нижче встановлюються параметри конкретно для кнопки на яку тикунли
+
+        btnPlay.classList.add('btn__play--hidden');
+
         const video = event.target.closest('.slider__video').querySelector('video');
         video.play();
         video.setAttribute('controls', 'controls');
-        btn__play.classList.add('btn__play--hidden');
-        content.classList.add('slider__video-content--hidden')
+
+        const content = event.target.closest('.slider__video').querySelector('.slider__video-content');
+        content.classList.add('slider__video-content--hidden');
     })
 });
